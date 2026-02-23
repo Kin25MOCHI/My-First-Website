@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isabela - Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+</head>
+<body>
+    <div class="main">
+        <nav class="navbar">
+    <div class="icon">
+        <h2 class="logo">ISABELA</h2>
+    </div>
+    <div class="menu">
+        <ul>
+            <li><a href="index.html"><i class="fa-solid fa-house"></i> HOME</a></li>
+            <li><a href="#"><i class="fa-solid fa-screwdriver-wrench"></i> SERVICE</a></li>
+            <li><a href="#"><i class="fa-solid fa-envelope"></i> CONTACT</a></li>
+        </ul>
+    </div>
+</nav>
+
+        <div class="content-wrapper">
+            <div class="content">
+                <h1>Join <br><span>Our</span> <br>Journey</h1>
+                <p class="par">Create an account to save your favorite Isabela destinations and plan your next volcanic adventure.</p>
+            </div>
+
+            <div class="form">
+                <h2>Sign Up</h2>
+                
+                <div class="input-container">
+                    <input type="text" id="fullname" placeholder="Enter Full Name">
+                </div>
+
+                <div class="input-container">
+                    <input type="email" id="email" placeholder="Enter Email Here">
+                </div>
+
+                <div class="input-container">
+                    <input type="password" id="password" placeholder="Create Password">
+                </div>
+
+                <div class="input-container">
+                    <input type="password" id="confirm-pass" placeholder="Confirm Password">
+                </div>
+
+                <button class="btnn" id="signupBtn">Register</button>
+                
+                <p class="link">Already have an account?<br>
+                <a href="index.html" class="signup-link">Login here</a></p>
+            </div> 
+        </div>
+    </div>
+<script>
+    const signupBtn = document.getElementById('signupBtn');
+    const loginLink = document.querySelector('.signup-link');
+    const formContainer = document.querySelector('.form');
+
+    
+    const inputs = [
+        document.getElementById('fullname'),
+        document.getElementById('email'),
+        document.getElementById('password'),
+        document.getElementById('confirm-pass')
+    ];
+
+    
+    inputs.forEach((input, index) => {
+        input.addEventListener('keydown', (e) => {
+            if (e.key === "ArrowDown") {
+                e.preventDefault(); 
+                const nextInput = inputs[index + 1];
+                if (nextInput) nextInput.focus();
+            } else if (e.key === "ArrowUp") {
+                e.preventDefault();
+                const prevInput = inputs[index - 1];
+                if (prevInput) prevInput.focus();
+            } else if (e.key === "Enter") {
+                e.preventDefault();
+                signupBtn.click();
+            }
+        });
+    });
+
+    
+    signupBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const name = inputs[0].value;
+        const email = inputs[1].value;
+        const pass = inputs[2].value;
+        const confirmPass = inputs[3].value;
+
+        if (name === "" || email === "" || pass === "") {
+            alert("Please fill in all fields.");
+        } else if (pass !== confirmPass) {
+            alert("Passwords do not match!");
+        } else {
+            const userData = {
+                fullname: name,
+                email: email,
+                password: pass
+            };
+            
+            localStorage.setItem('savedUser', JSON.stringify(userData));
+            
+           
+            formContainer.classList.add('fade-out');
+            setTimeout(() => {
+                alert("Account created successfully! Now try logging in.");
+                window.location.href = "index.html";
+            }, 400); 
+        }
+    });
+
+    
+    loginLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetUrl = this.getAttribute('href');
+        formContainer.classList.add('fade-out');
+        setTimeout(() => {
+            window.location.href = targetUrl;
+        }, 300);
+    });
+</script>

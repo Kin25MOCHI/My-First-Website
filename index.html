@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isabela Destination</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <style>
+
+        .menu ul { 
+            display: flex; 
+            list-style: none; 
+            align-items: center;
+            gap: 15px; 
+        }
+
+        .menu ul li a { 
+            color: #fff; 
+            text-decoration: none; 
+            font-size: 13px; 
+            font-weight: bold;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px; 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px; 
+            transition: 0.3s all ease;
+        }
+
+        
+        .menu ul li a:hover {
+            background: #04d9ff;
+            border-color: #04d9ff;
+            color: #000;
+            box-shadow: 0 0 15px rgba(4, 217, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+       
+        .input-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #04d9ff;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+       <nav class="navbar" role="navigation" aria-label="Main Navigation">
+    <div class="icon">
+        <h2 class="logo">ISABELA</h2>
+    </div>
+
+    <div class="menu">
+        <ul>
+            <li><a href="#home"><ion-icon name="home-outline"></ion-icon> HOME</a></li>
+            <li><a href="#service"><ion-icon name="construct-outline"></ion-icon> SERVICE</a></li>
+            <li><a href="#contact"><ion-icon name="mail-outline"></ion-icon> CONTACT</a></li>
+        </ul>
+    </div>
+</nav>
+
+        <div class="content-wrapper">
+            <div class="content">
+                <h1>Welcome <br><span>To</span> <br>Isabela</h1>
+                <p class="par">Isabela is a place where wild nature and peaceful island life come together, offering breathtaking volcanic landscapes and pristine beaches.</p>
+                <button class="cn" id="exploreBtn">About</button>
+            </div>
+
+            <div class="form">
+                <h2>Welcome</h2>
+                
+                <div class="input-container">
+                    <input type="email" id="email" placeholder="Enter Email Here">
+                    <ion-icon name="close-circle-outline" id="clear-email" class="input-icon" style="display:none;"></ion-icon>
+                </div>
+
+                <div class="input-container">
+                    <input type="password" id="password" placeholder="Enter Password Here">
+                    <ion-icon name="eye-outline" id="toggle-password" class="input-icon"></ion-icon>
+                </div>
+
+                <button class="btnn" id="loginBtn">Log in</button>
+                
+                <p class="link">Don't have an account?<br>
+                <a href="signup.html" class="signup-link">Sign up here</a></p>
+                
+                <p class="liw">Log in with</p>
+
+                <div class="icons">
+                    <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
+                    <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
+                    <a href="#"><ion-icon name="logo-google"></ion-icon></a>
+                    <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
+                    <a href="#"><ion-icon name="logo-skype"></ion-icon></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="customAlert" class="modal-overlay">
+        <div class="modal-content">
+            <ion-icon name="checkmark-circle-outline" style="font-size: 60px; color: #04d9ff;"></ion-icon>
+            <h2>Success!</h2>
+            <p>Login successful! Welcome back to Isabela.</p>
+            <button id="closeModal" class="modal-btn">Continue</button>
+        </div>
+    </div>
+
+<script>
+ 
+    const loginBtn = document.getElementById('loginBtn');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const clearEmail = document.getElementById('clear-email');
+    const togglePassword = document.getElementById('toggle-password');
+    const modal = document.getElementById('customAlert');
+    const closeModal = document.getElementById('closeModal');
+    const formContainer = document.querySelector('.form');
+
+   
+    loginBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const storedData = localStorage.getItem('savedUser');
+        
+        if (storedData) {
+            const user = JSON.parse(storedData);
+            if (emailInput.value === user.email && passwordInput.value === user.password) {
+              
+                localStorage.setItem('username', user.fullname);
+                
+                modal.style.display = 'flex';
+                
+                closeModal.onclick = function() {
+                    modal.style.display = 'none';
+                    formContainer.style.opacity = '0';
+                    setTimeout(() => {
+                        window.location.href = "dashboard.html";
+                    }, 300);
+                };
+            } else {
+                alert("Invalid email or password!");
+            }
+        } else {
+            alert("No account found. Please sign up first.");
+        }
+    });
+
+     const inputs = [emailInput, passwordInput];
+    inputs.forEach((input, index) => {
+        input.addEventListener('keydown', (e) => {
+            if (e.key === "ArrowDown") {
+                e.preventDefault();
+                const nextInput = inputs[index + 1];
+                if (nextInput) nextInput.focus();
+            } else if (e.key === "ArrowUp") {
+                e.preventDefault();
+                const prevInput = inputs[index - 1];
+                if (prevInput) prevInput.focus();
+            } else if (e.key === "Enter") {
+                e.preventDefault();
+                loginBtn.click();
+            }
+        });
+    });
+
+  
+    togglePassword.addEventListener('click', () => {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        togglePassword.setAttribute('name', type === 'password' ? 'eye-outline' : 'eye-off-outline');
+    });
+
+
+    emailInput.addEventListener('input', () => {
+        clearEmail.style.display = emailInput.value.length > 0 ? 'block' : 'none';
+    });
+
+    clearEmail.addEventListener('click', () => {
+        emailInput.value = '';
+        clearEmail.style.display = 'none';
+        emailInput.focus(); 
+    });
+
+   
+    document.getElementById('exploreBtn').addEventListener('click', () => {
+        window.location.href = "about.html";
+    });
+</script>
+</body>
+</html>

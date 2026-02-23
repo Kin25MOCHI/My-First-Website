@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isabela - Dashboard</title>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    
+<style>
+    /* Reset and Base Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: #222;
+        font-family: 'Arial', sans-serif;
+        overflow: hidden;
+    }
+
+    /* Navbar styling */
+    .navbar {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 100px;
+        position: absolute;
+        top: 0;
+        z-index: 1000;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
+    }
+
+    .logo { color: #fff; letter-spacing: 2px; }
+    
+    .menu ul { 
+        display: flex; 
+        list-style: none; 
+        align-items: center;
+        gap: 15px; /* Spacing between the pill buttons */
+    }
+
+    /* APPLYING PILL STYLE TO ALL MENU ITEMS */
+    .menu ul li a { 
+        color: #fff; 
+        text-decoration: none; 
+        font-size: 13px; 
+        font-weight: bold;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 22px; 
+        background: rgba(255, 255, 255, 0.05); /* Subtle glass background */
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 50px; /* Makes it a pill */
+        transition: 0.3s;
+    }
+
+    /* Highlighting the User Profile Pill specifically */
+    .user-profile-menu a {
+        background: rgba(4, 217, 255, 0.1) !important;
+        border: 1px solid rgba(4, 217, 255, 0.4) !important;
+    }
+
+    /* Universal Hover Effect for all Pills */
+    .menu ul li a:hover {
+        background: #04d9ff !important;
+        color: #000 !important;
+        border-color: #04d9ff !important;
+        box-shadow: 0 0 15px rgba(4, 217, 255, 0.6);
+        transform: translateY(-2px);
+    }
+
+    .menu ul li a ion-icon {
+        font-size: 18px;
+    }
+
+    /* Slider Container */
+    .container {
+        width: 100%;
+        height: 100vh;
+        position: relative;
+    }
+
+    .slide .item {
+        width: 200px;
+        height: 300px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        border-radius: 20px;
+        box-shadow: 0 30px 50px rgba(0,0,0,0.5);
+        background-position: center;
+        background-size: cover;
+        transition: 0.5s;
+    }
+
+    .slide .item:nth-child(1),
+    .slide .item:nth-child(2) {
+        top: 0;
+        left: 0;
+        transform: translateY(0);
+        border-radius: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .slide .item:nth-child(2)::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to right, rgba(0,0,0,0.8) 10%, transparent 60%);
+        z-index: 1;
+    }
+
+    .slide .item:nth-child(3) { left: 60%; }
+    .slide .item:nth-child(4) { left: calc(60% + 220px); }
+    .slide .item:nth-child(5) { left: calc(60% + 440px); }
+    .slide .item:nth-child(n+6) { left: calc(60% + 660px); opacity: 0; }
+
+    .item .content {
+        position: absolute;
+        top: 50%;
+        left: 100px;
+        width: 500px;
+        color: #fff;
+        transform: translateY(-50%);
+        display: none;
+        z-index: 10;
+    }
+
+    .slide .item:nth-child(2) .content { display: block; }
+
+    .content .name {
+        font-size: 80px;
+        text-transform: uppercase;
+        font-weight: bold;
+        opacity: 0;
+        animation: showContent 1s ease-in-out 1 forwards;
+    }
+
+    .content .des {
+        margin: 20px 0;
+        font-size: 18px;
+        opacity: 0;
+        animation: showContent 1s ease-in-out 0.3s 1 forwards;
+    }
+
+    .content button {
+        padding: 15px 30px;
+        border: 2px solid #04d9ff;
+        background: transparent;
+        color: #fff;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: 0.4s;
+        opacity: 0;
+        animation: showContent 1s ease-in-out 0.6s 1 forwards;
+    }
+
+    .content button:hover {
+        background: #04d9ff;
+        color: #000;
+        box-shadow: 0 0 25px rgba(4, 217, 255, 0.7);
+        transform: translateY(-5px);
+    }
+
+    @keyframes showContent {
+        from { opacity: 0; transform: translateY(100px); filter: blur(20px); }
+        to { opacity: 1; transform: translateY(0); filter: blur(0); }
+    }
+
+    .button {
+        width: 100%;
+        text-align: center;
+        position: absolute;
+        bottom: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+    }
+
+    .button button {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        border: 1px solid #fff;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        cursor: pointer;
+        margin: 0 10px;
+        transition: 0.3s;
+        font-size: 20px;
+    }
+
+    .button button:hover {
+        background: #04d9ff;
+        border-color: #04d9ff;
+        color: #000;
+    }
+
+    /* Dropdown Container */
+    .dropdown {
+        position: relative;
+    }
+
+    /* The Hidden Menu */
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        top: 110%; /* Places it right below the pill */
+        left: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        min-width: 200px;
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        overflow: hidden;
+        z-index: 2000;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Links inside the dropdown */
+    .dropdown-content a {
+        padding: 12px 20px !important;
+        border-radius: 0 !important; /* Overriding the pill shape for items */
+        border: none !important;
+        background: transparent !important;
+        display: block !important;
+        text-align: left;
+        transition: 0.2s;
+    }
+
+    .dropdown-content a:hover {
+        background: rgba(4, 217, 255, 0.2) !important;
+        color: #04d9ff !important;
+        transform: none !important; /* Keeps it steady */
+    }
+
+    /* Show on Hover */
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+</style>
+</head>
+
+<body>
+    <div class="main">
+        <nav class="navbar">
+            <div class="icon">
+                <h2 class="logo">ISABELA</h2>
+            </div>
+            <div class="menu">
+                <ul>
+                    <li><a href="#"><ion-icon name="apps-outline"></ion-icon> DASHBOARD</a></li>
+                    <li><a href="#"><ion-icon name="airplane-outline"></ion-icon> MY TRIPS</a></li>
+                    <li><a href="gallery.html"><ion-icon name="images-outline"></ion-icon> GALLERY</a></li>
+                    <li class="user-profile-menu">
+                        <a href="profile.html">
+                            <ion-icon name="person-circle-outline"></ion-icon>
+                            <span id="username-display">User</span>
+                        </a>
+                    </li>
+                    <li><a href="index.html" class="logout-btn"><ion-icon name="log-out-outline"></ion-icon> LOGOUT</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="slide">
+                <div class="item" style="background-image: url('sierra-madre.jpg');">
+                    <div class="content">
+                        <div class="name">Sierra Madre</div>
+                        <div class="des">Explore the lush rainforests and hidden peaks of Isabela.</div>
+                        <a href="sierra-madre.html"><button>See More</button></a>
+                    </div>
+                </div>
+
+                <div class="item" style="background-image: url('honeymoon-island.jpg');">
+                    <div class="content">
+                        <div class="name">Honeymoon Island</div>
+                        <div class="des">Relax on the pristine white sandy beaches and turquoise waters.</div>
+                        <a href="honeymoon-island.html"><button>See More</button></a>
+                    </div>
+                </div>
+
+                <div class="item" style="background-image: url('magat-dam.jpg');">
+                    <div class="content">
+                        <div class="name">Magat Dam</div>
+                        <div class="des">Visit one of Asia's largest power-generating dams.</div>
+                        <a href="magat-dam.html"><button>See More</button></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button">
+                <button class="prev"><ion-icon name="arrow-back-outline"></ion-icon></button>
+                <button class="next"><ion-icon name="arrow-forward-outline"></ion-icon></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Slider Logic
+        const nextBtn = document.querySelector('.next');
+        const prevBtn = document.querySelector('.prev');
+
+        nextBtn.addEventListener('click', () => {
+            let items = document.querySelectorAll('.item');
+            document.querySelector('.slide').appendChild(items[0]);
+        });
+
+        prevBtn.addEventListener('click', () => {
+            let items = document.querySelectorAll('.item');
+            document.querySelector('.slide').prepend(items[items.length - 1]);
+        });
+
+        // 2. Dynamic Username Logic
+        window.onload = function() {
+            const activeUser = localStorage.getItem('username'); 
+            if (activeUser) {
+                document.getElementById('username-display').innerText = activeUser;
+            }
+        };
+
+        // 3. Logout Logic
+        document.querySelector('.logout-btn').addEventListener('click', () => {
+            localStorage.removeItem('username');
+        });
+    </script>
+</body>
+</html>

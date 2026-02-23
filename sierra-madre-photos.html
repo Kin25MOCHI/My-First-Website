@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Honeymoon Island - Gallery</title>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+     
+        body {
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('honey.jpg');
+            background-size: cover;
+            background-position: center;
+            font-family: 'Segoe UI', sans-serif;
+            color: #fff;
+            /* Lock height to exactly 100% of the viewport */
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden; 
+            display: flex;
+            flex-direction: column;
+            padding: 10px 5% 20px 5%;
+        }
+
+        body.fade-in { opacity: 1; }
+        
+        /* Navigation Button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            text-decoration: none;
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            transition: 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: #04d9ff;
+            color: #000;
+            border-color: #04d9ff;
+            box-shadow: 0 0 15px rgba(4, 217, 255, 0.6);
+        }
+
+        /* Header Section - Compressed to save vertical space */
+        .header {
+            text-align: center;
+            margin-top: 50px; 
+            margin-bottom: 10px;
+            flex-shrink: 0; 
+        }
+
+        .header h1 {
+            font-size: clamp(1.2rem, 4vh, 2rem);
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            font-weight: 300;
+            color: #04d9ff;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Photo Grid - Uses flex-grow to fill the remaining screen height */
+        .photo-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr); /* Forces exactly 2 rows */
+            gap: 12px;
+            flex-grow: 1; 
+            min-height: 0; /* Important for grid shrinking */
+        }
+
+        .photo-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: 0.4s ease;
+        }
+
+        /* 5-Photo Layout Logic */
+        .photo-item:nth-child(1) { grid-column: span 2; } 
+        .photo-item:nth-child(2) { grid-column: span 1; }
+        .photo-item:nth-child(3) { grid-column: span 1; }
+        .photo-item:nth-child(4) { grid-column: span 1; }
+        .photo-item:nth-child(5) { grid-column: span 1; }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures images fill the box without distorting */
+            display: block;
+        }
+
+        .photo-item:hover {
+            border-color: #04d9ff;
+            transform: translateY(-3px);
+            z-index: 10;
+        }
+
+        /* Tablet/Mobile Adjustments */
+        @media (max-width: 768px) {
+            body { overflow-y: auto; height: auto; }
+            .photo-container { 
+                grid-template-columns: 1fr; 
+                grid-template-rows: auto;
+                height: auto;
+            }
+            .photo-item:nth-child(1) { grid-column: span 1; }
+            .photo-item { height: 200px; }
+        }
+    </style>
+</head>
+<body id="page-body">
+
+    <a href="gallery.html" class="back-btn transition-link">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        Back to Gallery
+    </a>
+
+    <div class="header">
+        <h1>Sierra Madre</h1>
+        <p>Explore the beauty of Sierra Madre in Isabela</p>
+    </div>
+
+    <div class="photo-container">
+        <div class="photo-item">
+            <img src="sher.jpg" alt="Sierra Madre Overview">
+        </div>
+        <div class="photo-item">
+            <img src="sherr.webp" alt="Sierra Madre Beach">
+        </div>
+        <div class="photo-item">
+            <img src="sierra madre fronting san agustin isa.JPG" alt="Sierra Madre Fronting San Agustin">
+        </div>
+        <div class="photo-item">
+            <img src="sierra madre.png" alt="Sierra Madre Aerial View">
+        </div>
+        <div class="photo-item">
+            <img src="sierra-madre.jpg" alt="Sierra Madre Landscape">
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('fade-in');
+        });
+
+        document.querySelectorAll('.transition-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                let target = this.href;
+                document.body.style.opacity = '0';
+                setTimeout(() => {
+                    window.location.href = target;
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>
